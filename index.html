@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurelia - 18K Demi Fine Jewelry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .serif-font {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .gold-gradient {
+            background: linear-gradient(45deg, #FFD700, #FDB931);
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl serif-font font-bold">Aurelia</h1>
+                <div class="flex items-center space-x-6">
+                    <a href="#" class="hover:text-yellow-600">Home</a>
+                    <a href="#products" class="hover:text-yellow-600">Products</a>
+                    <a href="#stock" class="hover:text-yellow-600">My Stock</a>
+                    <a href="#" class="hover:text-yellow-600"><i class="bi bi-person"></i></a>
+                    <a href="#" class="hover:text-yellow-600" id="cartIcon">
+                        <i class="bi bi-bag"></i>
+                        <span id="cartCount" class="bg-yellow-600 text-white rounded-full px-2 py-1 text-xs">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-12 bg-yellow-50">
+        <div class="container mx-auto px-4 py-16 text-center">
+            <h2 class="text-4xl serif-font mb-4">Elegant 18K Demi Fine Jewelry</h2>
+            <p class="mb-8">Discover our collection of handcrafted pieces</p>
+            <div class="gold-gradient text-white inline-block px-6 py-3 rounded-full">Shop Now</div>
+        </div>
+    </section>
+
+    <!-- Gold Price Ticker -->
+    <section id="stock" class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="bg-yellow-50 p-6 rounded-lg">
+                <h3 class="text-2xl serif-font mb-4">Live Gold Rate</h3>
+                <div class="flex justify-between items-center">
+                    <span>Current Gold Price (24K):</span>
+                    <span id="goldPrice" class="text-xl font-bold">₹5,500/gram</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl serif-font mb-8 text-center">Our Collection</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product Cards -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Loyalty Card Modal -->
+    <div id="loyaltyModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-8 rounded-lg max-w-md mx-auto mt-20">
+            <h3 class="text-2xl serif-font mb-4">Your Loyalty Card</h3>
+            <p>Current Balance: <span id="loyaltyBalance">₹0</span></p>
+            <button onclick="closeLoyaltyModal()" class="mt-4 bg-yellow-600 text-white px-4 py-2 rounded">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulated product data
+        const products = [
+            { name: "Delicate Gold Ring", price: 1200, image: "https://images.unsplash.com/photo-1598560917505-59a3ad559071" },
+            { name: "Dainty Necklace", price: 1450, image: "https://images.unsplash.com/photo-1599643477877-530eb83abc8e" },
+            { name: "Gold Chain Bracelet", price: 1300, image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9" }
+        ];
+
+        // Render products
+        const productsContainer = document.querySelector('#products .grid');
+        products.forEach(product => {
+            productsContainer.innerHTML += `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="serif-font text-xl mb-2">${product.name}</h3>
+                        <p class="text-yellow-600 font-bold">₹${product.price}</p>
+                        <button onclick="addToCart('${product.name}', ${product.price})" 
+                                class="mt-4 bg-yellow-600 text-white px-4 py-2 rounded-full w-full">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Cart functionality
+        let cart = [];
+        let loyaltyPoints = 0;
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            document.getElementById('cartCount').textContent = cart.length;
+            
+            // Calculate loyalty points (4% of purchase)
+            const points = price * 0.04;
+            loyaltyPoints += points;
+            
+            alert(`Added ${name} to cart!\nEarned ₹${points.toFixed(2)} in loyalty points!`);
+        }
+
+        // Simulated gold price update
+        setInterval(() => {
+            const basePrice = 5500;
+            const variation = Math.random() * 100 - 50;
+            document.getElementById('goldPrice').textContent = 
+                `₹${(basePrice + variation).toFixed(2)}/gram`;
+        }, 5000);
+
+        // Loyalty modal functions
+        function showLoyaltyModal() {
+            document.getElementById('loyaltyModal').classList.remove('hidden');
+            document.getElementById('loyaltyBalance').textContent = 
+                `₹${loyaltyPoints.toFixed(2)}`;
+        }
+
+        function closeLoyaltyModal() {
+            document.getElementById('loyaltyModal').classList.add('hidden');
+        }
+
+        // Add event listeners
+        document.querySelector('#cartIcon').addEventListener('click', () => {
+            alert(`Cart Total: ₹${cart.reduce((sum, item) => sum + item.price, 0)}`);
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
